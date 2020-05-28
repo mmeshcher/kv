@@ -41,5 +41,4 @@ void init()
                             << "\nOutput: " << Globals::output
                             << "\nThreads: " << Globals::threadAmount
                             << "\nLogLevel: " << Globals::logLevel;
-                            
 }
