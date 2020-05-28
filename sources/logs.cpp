@@ -1,3 +1,5 @@
+// Copyright 2020 <mmeshcher>
+
 #include "logs.hpp"
 #include "Globals.hpp"
 
@@ -14,11 +16,9 @@ void init()
             boost::log::keywords::file_name = "logs/log_%N.log",
             boost::log::keywords::rotation_size = 128 * 1024 * 1024,
             boost::log::keywords::auto_flush = true,
-            boost::log::keywords::format = format
-    );
+            boost::log::keywords::format = format);
     sinkFile->set_filter(
-            boost::log::trivial::severity >= boost::log::trivial::trace
-    );
+            boost::log::trivial::severity >= boost::log::trivial::trace);
 
     static const boost::unordered_map<std::string,
     boost::log::trivial::severity_level> CONSOLE_FILTER = {
@@ -30,12 +30,10 @@ void init()
 
     auto sinkConsole = boost::log::add_console_log(
             std::cout,
-            boost::log::keywords::format = format
-    );
+            boost::log::keywords::format = format);
     sinkConsole->set_filter(
             boost::log::trivial::severity >=
-            CONSOLE_FILTER.at(Globals::logLevel)
-    );
+            CONSOLE_FILTER.at(Globals::logLevel));
 
     boost::log::add_common_attributes();
      BOOST_LOG_TRIVIAL(debug) << "Log setup complete";

@@ -1,3 +1,5 @@
+// Copyright 2020 <mmeshcher>
+
 #include "Globals.hpp"
 
 std::string Globals::logLevel{};

@@ -1,9 +1,10 @@
+// Copyright 2020 <mmeshcher>
+
 #include "Random.hpp"
 #include "Globals.hpp"
 
 int programArguments(int argc, char **argv)
 {
-
     static const std::string OUTPUT_DEFAULT = "dbcs-source";
 
     boost::program_options::positional_options_description positionalArgs;

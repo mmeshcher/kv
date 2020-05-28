@@ -1,3 +1,5 @@
+// Copyright 2020 <mmeshcher>
+
 #include <boost/asio.hpp>
 
 #include "Random.hpp"
@@ -35,14 +37,14 @@ int main(int argc, char *argv[])
     auto handlers = actions.open(descriptors);
 
     std::list<boost::unordered_map<std::string, std::string>> cachedRows;
-    for (auto &family: handlers) {
+    for (auto &family : handlers) {
         cachedRows.push_back(actions.getRows(family.get()));
         auto &rows = cachedRows.back();
         auto beginIterator = rows.cbegin();
         if (beginIterator != rows.cend()) {
             boost::asio::post(
-                pool,[&actions, &family, beginIterator, &rows]() {
-                actions.hashRows(family.get(),beginIterator,rows.cend());
+                pool, [&actions, &family, beginIterator, &rows]() {
+                actions.hashRows(family.get(), beginIterator, rows.cend());
             });
         }
     }
