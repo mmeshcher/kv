@@ -12,5 +12,4 @@ struct Globals
     static const size_t BAREV = 1;
 static const size_t CHKORES = 5;
 static const size_t MINCH = 25;
-static const size_t CHARACTERS = 62;
 };
