@@ -7,7 +7,7 @@ DataBase::getFamilyDescriptorList()
 {
     rocksdb::Options options;
     std::vector<std::string> families;
-    rocksdb::Status status = rocksdb::DB::ListColumnFamilies(DBOptions(),
+    rocksdb::Status status = rocksdb::DB::ListColumnFamilies(rocksdb::DBOptions(),
                                            path_,
                                            &families);
     assert(status.ok());
@@ -24,9 +24,9 @@ std::list<std::unique_ptr<rocksdb::ColumnFamilyHandle>>
 DataBase::open(const std::vector<rocksdb::ColumnFamilyDescriptor> &descriptors)
 {
     std::list<std::unique_ptr<rocksdb::ColumnFamilyHandle>> handlers;
-    std::vector<rocksd::ColumnFamilyHandle *> pureHandlers;
+    std::vector<rocksdb::ColumnFamilyHandle *> pureHandlers;
     rocksdb::DB *dbRawPointer;
-    rocksdb::Status status = rocksd::DB::Open(rocksdb::DBOptions{},
+    rocksdb::Status status = rocksdb::DB::Open(rocksdb::DBOptions{},
                              path_,
                              descriptors,
                              &pureHandlers,
@@ -100,10 +100,10 @@ std::list<std::unique_ptr<rocksdb::ColumnFamilyHandle>>
 DataBase::randomFillFamilies()
 {
     static std::mt19937 generator{std::random_device{}()};
-    static std::uniform_int_distribution<size_t> randomFamilyAmount{1, 5};
+    static std::uniform_int_distribution<size_t> randomFamilyAmount{BAREV, CHKORES};
     size_t familyAmount = randomFamilyAmount(generator);
     std::list<std::unique_ptr<rocksdb::ColumnFamilyHandle>> families{};
-    for (size_t i = 0; i < familyAmount; i++) {
+    for (size_t i = 0; i < familyAmount; ++i) {
         static const size_t FAMILY_NAME_LENGTH = 5;
         rocksdb::ColumnFamilyHandle *familyRawPointer;
         std::string familyName = createRandomString(FAMILY_NAME_LENGTH);
@@ -122,13 +122,13 @@ void DataBase::randomFillRows(
     const std::list<std::unique_ptr<rocksdb::ColumnFamilyHandle>> &container)
 {
     static std::mt19937 generator{std::random_device{}()};
-    static std::uniform_int_distribution<size_t> randomRowAmount{5, 25};
+    static std::uniform_int_distribution<size_t> randomRowAmount{CHKORES, MINCH};
     static const size_t key_l = 5;
     static const size_t value_l = 10;
     for (const std::unique_ptr<rocksdb::ColumnFamilyHandle> &family : container) {
         BOOST_LOG_TRIVIAL(debug) << "Fill family: " << family->GetName();
         size_t rowAmount = randomRowAmount(generator);
-        for (size_t i = 0; i < rowAmount; i++) {
+        for (size_t i = 0; i < rowAmount; ++i) {
             std::string key = createRandomString(key_l);
             std::string value = createRandomString(value_l);
 
