@@ -1,6 +1,7 @@
 // Copyright 2020 <mmeshcher>
 
 #include "DataBase.hpp"
+#include "Globals.hpp"
 
 std::vector<rocksdb::ColumnFamilyDescriptor>
 DataBase::getFamilyDescriptorList()
