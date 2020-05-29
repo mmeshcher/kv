@@ -7,14 +7,14 @@ DataBase::getFamilyDescriptorList()
 {
     rocksdb::Options options;
     std::vector<std::string> families;
-    rocksd::Status status = rocksdb::DB::ListColumnFamilies(DBOptions(),
+    rocksdb::Status status = rocksdb::DB::ListColumnFamilies(DBOptions(),
                                            path_,
                                            &families);
     assert(status.ok());
     std::vector<rocksdb::ColumnFamilyDescriptor> descriptors;
     for (const std::string &familyName : families) {
         descriptors.emplace_back(familyName,
-                                 rocksd::ColumnFamilyOptions{});
+                                 rocksdb::ColumnFamilyOptions{});
     }
     BOOST_LOG_TRIVIAL(debug) << "Got families descriptors";
     return descriptors;
@@ -45,7 +45,7 @@ boost::unordered_map<std::string, std::string> DataBase::getRows(
 {
     BOOST_LOG_TRIVIAL(debug) << "Rewrite family: " << family->GetName();
     boost::unordered_map<std::string, std::string> toWrite;
-    std::unique_ptr<rocksd::Iterator> it{db_->NewIterator(rocksdb::ReadOptions{}, family)};
+    std::unique_ptr<rocksdb::Iterator> it{db_->NewIterator(rocksdb::ReadOptions{}, family)};
     for (it->SeekToFirst(); it->Valid(); it->Next()) {
         std::string key = it->key().ToString();
         std::string value = it->value().ToString();
@@ -85,7 +85,7 @@ void DataBase::create()
     rocksdb::Options options;
     options.create_if_missing = true;
     rocksdb::DB *dbRawPointer;
-    rocksdb::Status status = DB::Open(options, path_, &dbRawPointer);
+    rocksdb::Status status = rocksdb::DB::Open(options, path_, &dbRawPointer);
     assert(status.ok());
     db_.reset(dbRawPointer);
 }
