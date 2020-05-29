@@ -7,14 +7,14 @@ DataBase::getFamilyDescriptorList()
 {
     rocksdb::Options options;
     std::vector<std::string> families;
-    Status status = rocksdb::DB::ListColumnFamilies(DBOptions(),
+    rocksd::Status status = rocksdb::DB::ListColumnFamilies(DBOptions(),
                                            path_,
                                            &families);
     assert(status.ok());
     std::vector<rocksdb::ColumnFamilyDescriptor> descriptors;
     for (const std::string &familyName : families) {
         descriptors.emplace_back(familyName,
-                                 ColumnFamilyOptions{});
+                                 rocksd::ColumnFamilyOptions{});
     }
     BOOST_LOG_TRIVIAL(debug) << "Got families descriptors";
     return descriptors;
@@ -24,9 +24,9 @@ std::list<std::unique_ptr<rocksdb::ColumnFamilyHandle>>
 DataBase::open(const std::vector<rocksdb::ColumnFamilyDescriptor> &descriptors)
 {
     std::list<std::unique_ptr<rocksdb::ColumnFamilyHandle>> handlers;
-    std::vector<ColumnFamilyHandle *> pureHandlers;
+    std::vector<rocksd::ColumnFamilyHandle *> pureHandlers;
     rocksdb::DB *dbRawPointer;
-    rocksdb::Status status = DB::Open(rocksdb::DBOptions{},
+    rocksdb::Status status = rocksd::DB::Open(rocksdb::DBOptions{},
                              path_,
                              descriptors,
                              &pureHandlers,
@@ -45,7 +45,7 @@ boost::unordered_map<std::string, std::string> DataBase::getRows(
 {
     BOOST_LOG_TRIVIAL(debug) << "Rewrite family: " << family->GetName();
     boost::unordered_map<std::string, std::string> toWrite;
-    std::unique_ptr<Iterator> it{db_->NewIterator(rocksdb::ReadOptions{}, family)};
+    std::unique_ptr<rocksd::Iterator> it{db_->NewIterator(rocksdb::ReadOptions{}, family)};
     for (it->SeekToFirst(); it->Valid(); it->Next()) {
         std::string key = it->key().ToString();
         std::string value = it->value().ToString();
@@ -101,7 +101,7 @@ DataBase::randomFillFamilies()
 {
     static std::mt19937 generator{std::random_device{}()};
     static std::uniform_int_distribution<size_t> randomFamilyAmount{1, 5};
-    size_t familyAmount = rocksdb::randomFamilyAmount(generator);
+    size_t familyAmount = randomFamilyAmount(generator);
     std::list<std::unique_ptr<rocksdb::ColumnFamilyHandle>> families{};
     for (size_t i = 0; i < familyAmount; i++) {
         static const size_t FAMILY_NAME_LENGTH = 5;
