@@ -16,7 +16,7 @@ protected:
 		const char* argv_test[] = {"", "--log-level=error", "--thread=2", "--output=./ted", "./der", "--write-only"};
 
 	    programArguments(argc_test, const_cast<char **>(argv_test));
-        	
+        
     	removeDirectoryIfExists(Globals::output);
     	copyDirectory(Globals::input, Globals::output);
 
