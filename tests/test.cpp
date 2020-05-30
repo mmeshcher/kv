@@ -5,8 +5,6 @@
 #include <Globals.hpp>
 #include <logs.hpp>
 #include <Random.hpp>
-
-#include <gtest/gtest.h>
 #include <iostream>
 
 class TestKVStorage : public ::testing::Test
@@ -15,11 +13,10 @@ protected:
 	void SetUp()
 	{
 		int argc_test = 6;
-		const char* argv_test[] = {"","--log-level=error","--thread=2","--output=./ted","./der","--write-only"};
+		const char* argv_test[] = {"", "--log-level=error", "--thread=2", "--output=./ted", "./der", "--write-only"};
 
 	    programArguments(argc_test, const_cast<char **>(argv_test));
         	
-
     	removeDirectoryIfExists(Globals::output);
     	copyDirectory(Globals::input, Globals::output);
 
