@@ -42,9 +42,10 @@ hunter_add_package(rocksdb)
 find_package(RocksDB CONFIG REQUIRED)
 find_package(Threads)
 
-add_executable(
-  ${PROJECT_NAME}
-        ${CMAKE_CURRENT_SOURCE_DIR}/sources/main.cpp
+hunter_add_package(GTest)
+find_package(GTest CONFIG REQUIRED)
+
+add_library(kv_storage STATIC
         ${CMAKE_CURRENT_SOURCE_DIR}/sources/Random.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/sources/DataBase.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/sources/logs.cpp
@@ -52,17 +53,37 @@ add_executable(
 )
 
 target_include_directories(
-  ${PROJECT_NAME}
+  kv_storage
   PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 target_link_libraries(
-  ${PROJECT_NAME}
+  kv_storage
   Boost::program_options
   Boost::thread
   Boost::log
   Boost::log_setup
   Boost::filesystem
   RocksDB::rocksdb
+)
+
+add_executable(
+  tests2
+  ${CMAKE_CURRENT_SOURCE_DIR}/tests/test.cpp
+)
+
+target_include_directories(
+        tests2
+        PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${GTEST_ROOT}/include
+)
+
+target_link_libraries(
+        tests2
+        ${CMAKE_THREAD_LIBS_INIT}
+        GTest::gtest
+        GTest::main
+        kv_storage
 )
